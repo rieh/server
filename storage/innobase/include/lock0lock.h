@@ -923,6 +923,11 @@ lock_rec_free_all_from_discard_page(
 /*================================*/
 	const buf_block_t*	block);		/*!< in: page to be discarded */
 
+#ifdef WITH_INNODB_LEGACY_FOREIGN_STORAGE
+void
+fk_release_locks(dict_table_t *table);
+#endif /* WITH_INNODB_LEGACY_FOREIGN_STORAGE */
+
 /** The lock system */
 extern lock_sys_t lock_sys;
 
