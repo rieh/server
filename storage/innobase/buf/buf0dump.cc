@@ -366,6 +366,9 @@ buf_dump(
 				continue;
 			}
 
+			if (bpage->file_page_was_freed)
+				continue;
+
 			dump[j++] = BUF_DUMP_CREATE(bpage->id.space(),
 						    bpage->id.page_no());
 		}
