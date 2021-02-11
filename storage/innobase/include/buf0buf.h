@@ -518,8 +518,6 @@ though.
 @return TRUE if found in the page hash table */
 inline bool buf_page_peek(const page_id_t page_id);
 
-#ifdef UNIV_DEBUG
-
 /** Sets file_page_was_freed TRUE if the page is found in the buffer pool.
 This function should be called when we free a file page and want the
 debug version to check that it is not accessed any more unless
@@ -536,7 +534,6 @@ reallocated.
 @return control block if found in page hash table, otherwise NULL */
 buf_page_t* buf_page_reset_file_page_was_freed(const page_id_t page_id);
 
-#endif /* UNIV_DEBUG */
 /********************************************************************//**
 Reads the freed_page_clock of a buffer block.
 @return freed_page_clock */
@@ -1628,13 +1625,11 @@ public:
 					0 if the block was never accessed
 					in the buffer pool. Protected by
 					block mutex */
-# ifdef UNIV_DEBUG
 	ibool		file_page_was_freed;
 					/*!< this is set to TRUE when
 					fsp frees a page in buffer pool;
 					protected by buf_pool->zip_mutex
 					or buf_block_t::mutex. */
-# endif /* UNIV_DEBUG */
 
   void fix() { buf_fix_count++; }
   uint32_t unfix()

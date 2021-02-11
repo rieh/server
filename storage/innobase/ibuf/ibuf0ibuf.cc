@@ -2056,7 +2056,7 @@ ibuf_remove_free_page(void)
 
 	const page_id_t	page_id(IBUF_SPACE_ID, page_no);
 
-	ut_d(buf_page_reset_file_page_was_freed(page_id));
+	buf_page_reset_file_page_was_freed(page_id);
 
 	ibuf_enter(&mtr);
 
@@ -2098,7 +2098,7 @@ ibuf_remove_free_page(void)
 		bitmap_page, page_id, srv_page_size,
 		IBUF_BITMAP_IBUF, FALSE, &mtr);
 
-	ut_d(buf_page_set_file_page_was_freed(page_id));
+	buf_page_set_file_page_was_freed(page_id);
 
 	ibuf_mtr_commit(&mtr);
 }

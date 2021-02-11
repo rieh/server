@@ -2057,7 +2057,13 @@ fil_crypt_rotate_page(
 			some dummy pages will be allocated, with 0 in
 			the FIL_PAGE_TYPE. Those pages should be
 			skipped from key rotation forever. */
-		} else if (fil_crypt_needs_rotation(
+		}
+		else if (block->page.file_page_was_freed)
+		{
+			/* Do not modify freed pages to avoid an assertion
+			 failure on recovery.*/
+		}
+		else if (fil_crypt_needs_rotation(
 				crypt_data,
 				kv,
 				key_state->key_version,

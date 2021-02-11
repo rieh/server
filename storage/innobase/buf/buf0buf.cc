@@ -3612,7 +3612,6 @@ buf_page_make_young_if_needed(
 	}
 }
 
-#ifdef UNIV_DEBUG
 
 /** Sets file_page_was_freed TRUE if the page is found in the buffer pool.
 This function should be called when we free a file page and want the
@@ -3666,7 +3665,6 @@ buf_page_t* buf_page_reset_file_page_was_freed(const page_id_t page_id)
 
 	return(bpage);
 }
-#endif /* UNIV_DEBUG */
 
 /** Attempts to discard the uncompressed frame of a compressed page.
 The caller should not be holding any mutexes when this function is called.

@@ -2806,7 +2806,7 @@ fseg_free_page(
 
 	fseg_free_page_low(seg_inode, space, offset, log, mtr);
 
-	ut_d(buf_page_set_file_page_was_freed(page_id_t(space->id, offset)));
+	buf_page_set_file_page_was_freed(page_id_t(space->id, offset));
 
 	DBUG_VOID_RETURN;
 }
@@ -2867,7 +2867,7 @@ fseg_free_extent(
 	ut_ad(mach_read_from_4(seg_inode + FSEG_MAGIC_N)
 	      == FSEG_MAGIC_N_VALUE);
 	ut_d(space->modify_check(*mtr));
-	ut_d(ulint first_page_in_extent = page - (page % FSP_EXTENT_SIZE));
+	ulint first_page_in_extent = page - (page % FSP_EXTENT_SIZE);
 
 	if (xdes_is_full(descr, mtr)) {
 		flst_remove(seg_inode + FSEG_FULL,
@@ -2890,13 +2890,10 @@ fseg_free_extent(
 
 	fsp_free_extent(space, page, mtr);
 
-#ifdef UNIV_DEBUG
 	for (ulint i = 0; i < FSP_EXTENT_SIZE; i++) {
-
 		buf_page_set_file_page_was_freed(
 			page_id_t(space->id, first_page_in_extent + i));
 	}
-#endif /* UNIV_DEBUG */
 }
 
 /**********************************************************************//**
@@ -2966,10 +2963,13 @@ fseg_free_step(
 		DBUG_RETURN(true);
 	}
 
+	ulint nth_frag_page_no = fseg_get_nth_frag_page_no(inode, n, mtr);
 	fseg_free_page_low(
 		inode, space,
-		fseg_get_nth_frag_page_no(inode, n, mtr),
+		nth_frag_page_no,
 		true, mtr);
+	buf_page_set_file_page_was_freed(
+		page_id_t(space->id, nth_frag_page_no));
 
 	n = fseg_find_last_used_frag_page_slot(inode, mtr);
 
@@ -3034,6 +3034,7 @@ fseg_free_step_not_header(
 	}
 
 	fseg_free_page_low(inode, space, page_no, true, mtr);
+	buf_page_set_file_page_was_freed(page_id_t(space_id, page_no));
 	return false;
 }
 
