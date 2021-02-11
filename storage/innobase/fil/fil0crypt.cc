@@ -1889,12 +1889,12 @@ fil_crypt_get_page_throttle_func(
 	if (space->is_stopping()) {
 		return NULL;
 	}
-//#if 0
+
 	if (fseg_page_is_free(space, state->offset)) {
 		/* page is already freed */
 		return NULL;
 	}
-//#endif
+
 	state->crypt_stat.pages_read_from_disk++;
 
 	const ulonglong start = my_interval_timer();
