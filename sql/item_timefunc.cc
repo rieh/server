@@ -2418,7 +2418,7 @@ static bool make_date_time_oracle(const uint16 *fmt_array,
     {
       /* don't display '"' in the result, so if it is '"', skip it */
       if (*ptr != '"')
-        str->append(*ptr);
+        str->append((char) *ptr); // FIXME: please pay attention that this may be wrong!
       ptr++;
       continue;
     }
@@ -2494,7 +2494,7 @@ static bool make_date_time_oracle(const uint16 *fmt_array,
         {
           const char *month_name= (locale->ab_month_names->
                                    type_names[l_time->month-1]);
-          uint m_len= strlen(month_name);
+          size_t m_len= strlen(month_name);
           str->append(month_name, m_len, system_charset_info);
         }
       }
@@ -2548,7 +2548,7 @@ static bool make_date_time_oracle(const uint16 *fmt_array,
         else
         {
           const char *day_name;
-          uint day_byte_len, day_char_len;
+          size_t day_byte_len, day_char_len;
           weekday=calc_weekday(calc_daynr(l_time->year,l_time->month,
                                           l_time->day), 0);
           day_name= locale->day_names->type_names[weekday];

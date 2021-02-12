@@ -188,7 +188,6 @@ typedef struct st_ddl_log_memory_entry
 
 typedef struct st_ddl_log_state
 {
-  uint next_entry, execute_entry_pos;
   /* List of ddl log entries */
   DDL_LOG_MEMORY_ENTRY *list;
   /* One execute entry per list */
@@ -209,9 +208,6 @@ int ddl_log_execute_recovery();
 bool ddl_log_write_entry(DDL_LOG_ENTRY *ddl_log_entry,
                            DDL_LOG_MEMORY_ENTRY **active_entry);
 
-bool ddl_log_write_execute_entry_internal(uint first_entry,
-                                          bool complete,
-                                          DDL_LOG_MEMORY_ENTRY **active_entry);
 bool ddl_log_write_execute_entry(uint first_entry,
                                  DDL_LOG_MEMORY_ENTRY **active_entry);
 bool ddl_log_disable_execute_entry(DDL_LOG_MEMORY_ENTRY **active_entry);

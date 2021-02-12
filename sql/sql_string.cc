@@ -1280,10 +1280,11 @@ bool Binary_string::strfill(char fill, size_t len)
 {
   if (len)
   {
+    DBUG_ASSERT(len <= UINT_MAX32);
     if (alloc(length() + len))
       return 1;
     memset(Ptr + str_length, fill, len);
-    str_length+= len;
+    str_length+= (uint32) len;
   }
   return 0;
 }
