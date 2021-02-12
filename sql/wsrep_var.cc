@@ -560,6 +560,7 @@ bool wsrep_cluster_address_update (sys_var *self, THD* thd, enum_var_type type)
   */
   WSREP_DEBUG("wsrep_cluster_address_update: %s", wsrep_cluster_address);
   mysql_mutex_unlock(&LOCK_global_system_variables);
+  mysql_mutex_unlock(&LOCK_wsrep_cluster_config);
   wsrep_stop_replication(thd);
 
   if (wsrep_start_replication())
@@ -575,7 +576,6 @@ bool wsrep_cluster_address_update (sys_var *self, THD* thd, enum_var_type type)
      => have to juggle mutexes to comply with this
   */
 
-  mysql_mutex_unlock(&LOCK_wsrep_cluster_config);
   mysql_mutex_lock(&LOCK_global_system_variables);
   mysql_mutex_lock(&LOCK_wsrep_cluster_config);
 
