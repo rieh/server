@@ -425,14 +425,15 @@ struct trx_lock_t
   trx->mutex, by the thread that is executing the transaction.
   Set to nullptr when holding lock_sys.wait_mutex. */
   Atomic_relaxed<lock_t*> wait_lock;
+  /** Transaction being waited for.
+  Set to nullptr when holding lock_sys.wait_mutex.
+  Otherwise, only set by the thread that is executing the transaction,
+  while holding lock_sys.mutex. */
+  trx_t *wait_trx;
   /** condition variable for !wait_lock; used with lock_sys.wait_mutex */
   pthread_cond_t cond;
   /** lock wait start time, protected only by lock_sys.wait_mutex */
   my_hrtime_t suspend_time;
-
-  /** DeadlockChecker::search() uses this to keep track of visited locks.
-  Protected by lock_sys.is_writer(). */
-  uint64_t deadlock_mark;
 
 #ifdef WITH_WSREP
   /** 2=high priority wsrep thread has marked this trx to abort;
